@@ -150,7 +150,7 @@ function App() {
         'flex flex-col items-center justify-center h-full gap-[2vw] bg-black',
         {
           'bg-[#8B0000]':
-            !timer[0] && !timer[1] && initTimer[0] && initTimer[1],
+            !timer[0] && !timer[1] && (initTimer[0] || initTimer[1]),
         }
         // Could add waring color at x seconds
       )}
