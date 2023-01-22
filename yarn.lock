@@ -1568,6 +1568,11 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
+"@reecelucas/react-use-hotkeys@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@reecelucas/react-use-hotkeys/-/react-use-hotkeys-2.0.0.tgz#91b45191a4eef77aafd3b77f9eb91dd9b5229790"
+  integrity sha512-FIld06jQRLhp3Bl4ykwB/xDALLv2i/1y6ncLYv9wn7ZO7nVDs9HH9oTKFxX7K8U7EQ/bdPWWtN2fy2vci0ssTg==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"

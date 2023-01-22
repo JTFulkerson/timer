@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import React, { PropsWithChildren, useEffect, useState } from 'react';
+import useHotkeys from '@reecelucas/react-use-hotkeys';
 
 type UnitOfTimeT = 'MINUTES' | 'SECONDS';
 
@@ -23,20 +24,22 @@ function UnitOfTime(props: {
 
 type ButtonProps = { className: string; onClick: () => void };
 function Button(props: PropsWithChildren<ButtonProps>) {
-  const mySelf = React.useRef<HTMLButtonElement>(null);
   return (
-    <button
-      ref={mySelf}
+    <div
+      tabIndex={-1}
       className={classnames(
-        'text-white/80 bg-white/10 leading-10 rounded-[1vw] border-none focus:ring-0 outline-none',
+        'text-white/80 bg-white/10 leading-10 rounded-[1vw] border-none outline-none flex flex-col text-center justify-center',
         props.className
       )}
       onClick={(event) => {
         props.onClick();
       }}
+      onKeyDown={(event) => {
+        event.preventDefault();
+      }}
     >
       {props.children}
-    </button>
+    </div>
   );
 }
 
@@ -48,25 +51,21 @@ function App() {
     UnitOfTimeT | undefined
   >();
 
-  document.addEventListener('keydown', async (event) => {
-    switch (event.key) {
-      case 'f':
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-        } else if (document.exitFullscreen) {
-          await document.exitFullscreen();
-        }
-        break;
-      case ' ':
-        if (timer[0] || timer[1]) {
-          setRunning(!isRunning);
-        }
-        break;
-      case 'r':
-        setRunning(false);
-        setTimer(initTimer);
+  useHotkeys('f', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
     }
-    event.preventDefault();
+  });
+  useHotkeys(' ', () => {
+    if (timer[0] || timer[1]) {
+      setRunning(!isRunning);
+    }
+  });
+  useHotkeys('r', () => {
+    setRunning(false);
+    setTimer(initTimer);
   });
 
   useEffect(() => {
