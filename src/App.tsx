@@ -145,7 +145,13 @@ function App() {
   }, [isRunning, timer]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-[2vw]">
+    <div
+      className={classnames(
+        'flex flex-col items-center justify-center h-full gap-[2vw] bg-black',
+        { 'bg-[#8B0000]': !timer[0] && !timer[1] }
+        // Could add waring color at x seconds
+      )}
+    >
       <p className="text-white font-bold text-[22vw]">
         <UnitOfTime
           value={timer[0]}
