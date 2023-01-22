@@ -29,8 +29,8 @@ function UnitOfTime(props: {
 
 function App() {
   const [isRunning, setRunning] = useState(false);
-  const [timer, setTimer] = useState<[number, number]>([0, 0]);
-  const [initTimer, setInitTimer] = useState<[number, number]>([0, 0]);
+  const [timer, setTimer] = useState<[number, number]>([2, 0]);
+  const [initTimer, setInitTimer] = useState<[number, number]>([2, 0]);
   const [stoppedTimer, setStoppedTimer] = useState<[number, number]>([0, 0]);
   const [activeUnitOfTime, setActiveUnitOfTime] = useState<
     UnitOfTimeT | undefined
