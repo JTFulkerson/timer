@@ -5,7 +5,7 @@ import useHotkeys from '@reecelucas/react-use-hotkeys';
 type UnitOfTimeT = 'MINUTES' | 'SECONDS';
 
 function UnitOfTime(props: {
-  value: number;
+  value: number | string;
   name: UnitOfTimeT;
   setActive: (name: UnitOfTimeT) => void;
   active?: UnitOfTimeT;
@@ -17,29 +17,8 @@ function UnitOfTime(props: {
       })}
       onClick={() => props.setActive(props.name)}
     >
-      {('0' + props.value).slice(-2)}
+      {`00${props.value}`.slice(-2)}
     </span>
-  );
-}
-
-type ButtonProps = { className: string; onClick: () => void };
-function Button(props: PropsWithChildren<ButtonProps>) {
-  return (
-    <div
-      tabIndex={-1}
-      className={classnames(
-        'text-white/80 bg-white/10 leading-10 rounded-[1vw] border-none outline-none flex flex-col text-center justify-center',
-        props.className
-      )}
-      onClick={(event) => {
-        props.onClick();
-      }}
-      onKeyDown={(event) => {
-        event.preventDefault();
-      }}
-    >
-      {props.children}
-    </div>
   );
 }
 
@@ -50,6 +29,31 @@ function App() {
   const [activeUnitOfTime, setActiveUnitOfTime] = useState<
     UnitOfTimeT | undefined
   >();
+  const [typing, setTyping] = useState<[string, string]>(['', '']);
+
+  type ButtonProps = { className: string; onClick: () => void };
+  function Button(props: PropsWithChildren<ButtonProps>) {
+    return (
+      <div
+        tabIndex={-1}
+        className={classnames(
+          'text-white/80 bg-white/10 leading-10 rounded-[1vw] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40',
+          props.className
+        )}
+        onClick={(event) => {
+          props.onClick();
+          if (activeUnitOfTime) {
+            setActiveUnitOfTime(undefined);
+          }
+        }}
+        onKeyDown={(event) => {
+          event.preventDefault();
+        }}
+      >
+        {props.children}
+      </div>
+    );
+  }
 
   useHotkeys('f', () => {
     if (!document.fullscreenElement) {
@@ -67,6 +71,33 @@ function App() {
     setRunning(false);
     setTimer(initTimer);
   });
+  useHotkeys(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (event) => {
+    if (activeUnitOfTime) {
+      const currentValue =
+        activeUnitOfTime === 'MINUTES' ? typing[0] : typing[1];
+      const newValue = `${currentValue}${event.key}`.slice(-2);
+      console.log(`[${newValue}]`)
+      if (activeUnitOfTime === 'MINUTES') {
+        setTyping([newValue, typing[1]]);
+        if (newValue.length === 2) {
+          setActiveUnitOfTime('SECONDS');
+        }
+      } else {
+        setTyping([typing[0], newValue]);
+        if (newValue.length === 2) {
+          setActiveUnitOfTime(undefined);
+          setTimer([parseInt(typing[0]), parseInt(newValue)]);
+          setInitTimer([parseInt(typing[0]), parseInt(newValue)]);
+          setTyping(['', '']);
+        }
+      }
+    }
+  });
+  useEffect(() => {
+    if (activeUnitOfTime && isRunning) {
+      setRunning(false);
+    }
+  }, [activeUnitOfTime, isRunning]);
 
   useEffect(() => {
     if (isRunning) {
@@ -87,14 +118,14 @@ function App() {
     <div className="flex flex-col items-center justify-center h-full gap-[2vw]">
       <p className="text-white font-bold text-[22vw]">
         <UnitOfTime
-          value={timer[0]}
+          value={activeUnitOfTime ? typing[0] : timer[0]}
           name="MINUTES"
           active={activeUnitOfTime}
           setActive={(newActive: UnitOfTimeT) => setActiveUnitOfTime(newActive)}
         />
         :
         <UnitOfTime
-          value={timer[1]}
+          value={activeUnitOfTime ? typing[1] : timer[1]}
           name="SECONDS"
           active={activeUnitOfTime}
           setActive={(newActive: UnitOfTimeT) => setActiveUnitOfTime(newActive)}
