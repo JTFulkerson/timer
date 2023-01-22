@@ -29,8 +29,8 @@ function UnitOfTime(props: {
 
 function App() {
   const [isRunning, setRunning] = useState(false);
-  const [timer, setTimer] = useState<[number, number]>([2, 0]);
-  const [initTimer, setInitTimer] = useState<[number, number]>([2, 0]);
+  const [timer, setTimer] = useState<[number, number]>([0, 0]);
+  const [initTimer, setInitTimer] = useState<[number, number]>([0, 0]);
   const [stoppedTimer, setStoppedTimer] = useState<[number, number]>([0, 0]);
   const [activeUnitOfTime, setActiveUnitOfTime] = useState<
     UnitOfTimeT | undefined
@@ -148,7 +148,10 @@ function App() {
     <div
       className={classnames(
         'flex flex-col items-center justify-center h-full gap-[2vw] bg-black',
-        { 'bg-[#8B0000]': !timer[0] && !timer[1] }
+        {
+          'bg-[#8B0000]':
+            !timer[0] && !timer[1] && initTimer[0] && initTimer[1],
+        }
         // Could add waring color at x seconds
       )}
     >
