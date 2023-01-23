@@ -43,7 +43,7 @@ function App() {
       <div
         tabIndex={-1}
         className={classnames(
-          'text-white/80 bg-white/10 leading-10 rounded-[1vw] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40',
+          'text-white/80 bg-white/10 leading-10 rounded-[1vmin] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40',
           props.className
         )}
         onClick={(event) => {
@@ -147,7 +147,7 @@ function App() {
   return (
     <div
       className={classnames(
-        'flex flex-col items-center justify-center h-full gap-[2vw] bg-black',
+        'flex flex-col items-center justify-center h-full gap-[3vmin] bg-black',
         {
           'bg-[#8B0000]':
             !timer[0] && !timer[1] && (initTimer[0] || initTimer[1]),
@@ -155,7 +155,7 @@ function App() {
         // Could add waring color at x seconds
       )}
     >
-      <p className="text-white font-bold text-[22vw]">
+      <p className="text-white font-bold text-[44vmin]">
         <UnitOfTime
           value={timer[0]}
           typing={typing[0]}
@@ -178,9 +178,9 @@ function App() {
           }}
         />
       </p>
-      <div className="flex flex-row gap-[2vw]">
+      <div className="flex flex-row gap-[3vmin]">
         <Button
-          className="text-[4vw] h-[8vw] w-[14vw]"
+          className="text-[8vmin] h-[12vmin] w-[24vmin]"
           onClick={() => {
             if (timer[0] || timer[1]) {
               setRunning(!isRunning);
@@ -190,7 +190,7 @@ function App() {
           {isRunning ? 'pause' : 'start'}
         </Button>
         <Button
-          className="text-[4vw] h-[8vw] w-[14vw]"
+          className="text-[8vmin] h-[12vmin] w-[24vmin]"
           onClick={() => {
             setRunning(false);
             setTimer(initTimer);
@@ -199,9 +199,9 @@ function App() {
           reset
         </Button>
       </div>
-      <div className="flex flex-row gap-[2vw]">
+      <div className="flex flex-row gap-[3vmin]">
         <Button
-          className="text-[3vw] h-[6vw] w-[10vw]"
+          className="text-[5vmin] h-[10vmin] w-[16vmin]"
           onClick={() => {
             setTimer([1, 0]);
             setInitTimer([1, 0]);
@@ -211,7 +211,7 @@ function App() {
           1:00
         </Button>
         <Button
-          className="text-[3vw] h-[6vw] w-[10vw]"
+          className="text-[5vmin] h-[10vmin] w-[16vmin]"
           onClick={() => {
             setTimer([2, 0]);
             setInitTimer([2, 0]);
@@ -221,7 +221,7 @@ function App() {
           2:00
         </Button>
         <Button
-          className="text-[3vw] h-[6vw] w-[10vw]"
+          className="text-[5vmin] h-[10vmin] w-[16vmin]"
           onClick={() => {
             setTimer([3, 0]);
             setInitTimer([3, 0]);
