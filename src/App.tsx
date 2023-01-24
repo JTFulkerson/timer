@@ -149,7 +149,7 @@ function App() {
       className={classnames(
         'flex flex-col items-center justify-center h-full gap-[3vmin] bg-black',
         {
-          'bg-yellow-500': timer[1] <= 10 && timer[1] > 0,
+          'bg-yellow-500': timer[1] <= 10 && timer[1] > 0 && timer[0] === 0,
           'bg-[#8B0000]':
             !timer[0] && !timer[1] && (initTimer[0] || initTimer[1]),
         }
