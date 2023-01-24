@@ -213,6 +213,16 @@ function App() {
         <Button
           className="text-[5vmin] h-[10vmin] w-[16vmin]"
           onClick={() => {
+            setTimer([1, 30]);
+            setInitTimer([1, 30]);
+            setRunning(false);
+          }}
+        >
+          1:30
+        </Button>
+        <Button
+          className="text-[5vmin] h-[10vmin] w-[16vmin]"
+          onClick={() => {
             setTimer([2, 0]);
             setInitTimer([2, 0]);
             setRunning(false);
