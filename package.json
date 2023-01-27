@@ -1,8 +1,8 @@
 {
-  "name": "countdown",
+  "name": "timer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://JTFulkerson.github.io/countdown",
+  "homepage": "https://JTFulkerson.github.io/timer",
   "dependencies": {
     "@reecelucas/react-use-hotkeys": "^2.0.0",
     "@testing-library/jest-dom": "^5.14.1",
