@@ -36,6 +36,7 @@ function App() {
     UnitOfTimeT | undefined
   >();
   const [typing, setTyping] = useState<[string, string]>(['', '']);
+  const [chime, setChime] = useState<boolean>(false);
 
   type ButtonProps = { className: string; onClick: () => void };
   function Button(props: PropsWithChildren<ButtonProps>) {
@@ -98,6 +99,7 @@ function App() {
         setTimer([timer[0], newValue]);
       }
       setTyping(['', '']);
+      setInitTimer([timer[0], timer[1]]);
     }
   });
 
@@ -134,6 +136,9 @@ function App() {
       const interval = setInterval(() => {
         if (timer[0] === 0 && timer[1] === 0) {
           setRunning(false);
+          if (chime) {
+            //code to start chime
+          }
         } else if (timer[1] === 0) {
           setTimer([timer[0] - 1, 59]);
         } else {
@@ -142,105 +147,114 @@ function App() {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [isRunning, timer]);
+  }, [chime, isRunning, timer]);
 
   return (
     <div
-      className={classnames(
-        'flex flex-col items-center justify-center h-full gap-[3vmin] bg-black',
-        {
-          'bg-yellow-500': timer[1] <= 10 && timer[1] > 0 && timer[0] === 0,
-          'bg-[#8B0000]':
-            timer[0] === 0 && timer[1] === 0 && (initTimer[0] || initTimer[1]),
-        }
-      )}
+      className={classnames('h-full bg-black', {
+        'bg-yellow-500': timer[1] <= 10 && timer[1] > 0 && timer[0] === 0,
+        'bg-[#8B0000]':
+          timer[0] === 0 && timer[1] === 0 && (initTimer[0] || initTimer[1]),
+      })}
     >
-      <p className="text-white font-bold text-[44vmin]">
-        <UnitOfTime
-          value={timer[0]}
-          typing={typing[0]}
-          name="MINUTES"
-          active={activeUnitOfTime}
-          setActive={(newActive: UnitOfTimeT) => {
-            setActiveUnitOfTime(newActive);
-            setStoppedTimer(timer);
-          }}
-        />
-        :
-        <UnitOfTime
-          value={timer[1]}
-          typing={typing[1]}
-          name="SECONDS"
-          active={activeUnitOfTime}
-          setActive={(newActive: UnitOfTimeT) => {
-            setActiveUnitOfTime(newActive);
-            setStoppedTimer(timer);
-          }}
-        />
-      </p>
-      <div className="flex flex-row gap-[3vmin]">
-        <Button
-          className="text-[8vmin] h-[12vmin] w-[24vmin]"
+      <nav>
+        <button
+          className="text-white"
           onClick={() => {
-            if (timer[0] || timer[1]) {
-              setRunning(!isRunning);
-            }
+            setChime(!chime);
           }}
         >
-          {isRunning ? 'pause' : 'start'}
-        </Button>
-        <Button
-          className="text-[8vmin] h-[12vmin] w-[24vmin]"
-          onClick={() => {
-            setRunning(false);
-            setTimer(initTimer);
-          }}
-        >
-          reset
-        </Button>
-      </div>
-      <div className="flex flex-row gap-[3vmin]">
-        <Button
-          className="text-[5vmin] h-[10vmin] w-[16vmin]"
-          onClick={() => {
-            setTimer([1, 0]);
-            setInitTimer([1, 0]);
-            setRunning(false);
-          }}
-        >
-          1:00
-        </Button>
-        <Button
-          className="text-[5vmin] h-[10vmin] w-[16vmin]"
-          onClick={() => {
-            setTimer([1, 30]);
-            setInitTimer([1, 30]);
-            setRunning(false);
-          }}
-        >
-          1:30
-        </Button>
-        <Button
-          className="text-[5vmin] h-[10vmin] w-[16vmin]"
-          onClick={() => {
-            setTimer([2, 0]);
-            setInitTimer([2, 0]);
-            setRunning(false);
-          }}
-        >
-          2:00
-        </Button>
-        <Button
-          className="text-[5vmin] h-[10vmin] w-[16vmin]"
-          onClick={() => {
-            setTimer([3, 0]);
-            setInitTimer([3, 0]);
-            setRunning(false);
-          }}
-        >
-          3:00
-        </Button>
-      </div>
+          Chime: {chime ? 'Off' : 'On'}
+        </button>
+      </nav>
+      <main className="flex flex-col items-center justify-center gap-[3vmin]">
+        <p className="text-white font-bold text-[44vmin]">
+          <UnitOfTime
+            value={timer[0]}
+            typing={typing[0]}
+            name="MINUTES"
+            active={activeUnitOfTime}
+            setActive={(newActive: UnitOfTimeT) => {
+              setActiveUnitOfTime(newActive);
+              setStoppedTimer(timer);
+            }}
+          />
+          :
+          <UnitOfTime
+            value={timer[1]}
+            typing={typing[1]}
+            name="SECONDS"
+            active={activeUnitOfTime}
+            setActive={(newActive: UnitOfTimeT) => {
+              setActiveUnitOfTime(newActive);
+              setStoppedTimer(timer);
+            }}
+          />
+        </p>
+        <div className="flex flex-row gap-[3vmin]">
+          <Button
+            className="text-[8vmin] h-[12vmin] w-[24vmin]"
+            onClick={() => {
+              if (timer[0] || timer[1]) {
+                setRunning(!isRunning);
+              }
+            }}
+          >
+            {isRunning ? 'pause' : 'start'}
+          </Button>
+          <Button
+            className="text-[8vmin] h-[12vmin] w-[24vmin]"
+            onClick={() => {
+              setRunning(false);
+              setTimer(initTimer);
+            }}
+          >
+            reset
+          </Button>
+        </div>
+        <div className="flex flex-row gap-[3vmin]">
+          <Button
+            className="text-[5vmin] h-[10vmin] w-[16vmin]"
+            onClick={() => {
+              setTimer([1, 0]);
+              setInitTimer([1, 0]);
+              setRunning(false);
+            }}
+          >
+            1:00
+          </Button>
+          <Button
+            className="text-[5vmin] h-[10vmin] w-[16vmin]"
+            onClick={() => {
+              setTimer([1, 30]);
+              setInitTimer([1, 30]);
+              setRunning(false);
+            }}
+          >
+            1:30
+          </Button>
+          <Button
+            className="text-[5vmin] h-[10vmin] w-[16vmin]"
+            onClick={() => {
+              setTimer([2, 0]);
+              setInitTimer([2, 0]);
+              setRunning(false);
+            }}
+          >
+            2:00
+          </Button>
+          <Button
+            className="text-[5vmin] h-[10vmin] w-[16vmin]"
+            onClick={() => {
+              setTimer([3, 0]);
+              setInitTimer([3, 0]);
+              setRunning(false);
+            }}
+          >
+            3:00
+          </Button>
+        </div>
+      </main>
     </div>
   );
 }
