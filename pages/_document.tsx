@@ -4,8 +4,7 @@ export default function Document() {
     return (
         <Html>
             <Head>
-                <title>Timer</title>
-                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                {/* Only custom tags like favicon, description, etc. should be here */}
                 <meta name="description" content="Interactive timer with quick set buttons and keyboard shortcuts" />
                 <link rel="icon" href="/icons/timer-favicon.png" />
             </Head>

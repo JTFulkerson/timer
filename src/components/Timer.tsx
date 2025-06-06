@@ -5,6 +5,8 @@ import { useLocalStorage } from "usehooks-ts";
 import useHotkeys from "@reecelucas/react-use-hotkeys";
 import { useSound } from "use-sound";
 import { AnimatePresence, motion } from "framer-motion";
+import Button from "./Button";
+import Menu from "./Menu";
 
 type UnitOfTimeT = "MINUTES" | "SECONDS";
 
@@ -62,31 +64,6 @@ const Timer = () => {
   const toggleButtonsVisibility = () => {
     setHideButtons(!hideButtons);
   };
-
-  type ButtonProps = { className: string; onClick: () => void };
-  function Button(props: PropsWithChildren<ButtonProps>) {
-    return (
-      <div
-        tabIndex={-1}
-        className={classnames(
-          " bg-white/10 leading-10 rounded-[1vmin] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40",
-          props.className
-        )}
-        style={{ color: textColor }}
-        onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-          props.onClick();
-          if (activeUnitOfTime) {
-            setActiveUnitOfTime(undefined);
-          }
-        }}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          event.preventDefault();
-        }}
-      >
-        {props.children}
-      </div>
-    );
-  }
 
   useHotkeys("f", () => {
     if (!document.fullscreenElement) {
@@ -213,6 +190,17 @@ const Timer = () => {
     }
   }, [isRunning, timer]);
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (showMenu) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [showMenu]);
+
   interface TimerButtonProps {
     text: string;
     time: [number, number];
@@ -246,8 +234,9 @@ const Timer = () => {
   return (
     <>
       <div className="relative">
-        {!hideButtons ? (
-          <div className="absolute top-2 right-0">
+        {/* Hamburger menu button always visible */}
+        {!hideButtons && (
+          <div className="absolute top-2 right-0 z-50">
             <button
               onClick={(event: React.MouseEvent<HTMLButtonElement>) => setShowMenu(!showMenu)}
               className="flex items-center px-3 py-2 text-white justify-end"
@@ -265,132 +254,43 @@ const Timer = () => {
               </svg>
             </button>
           </div>
-        ) : null}
+        )}
         <AnimatePresence>
           {showMenu && (
             <motion.div
-              className="from-right"
+              className="fixed top-0 right-0 z-40 w-[min(90vw,400px)] h-auto rounded-l-lg shadow-lg bg-white"
               initial="hidden"
               animate="visible"
               exit="hidden"
               variants={{
-                hidden: {
-                  opacity: 0,
-                  x: 50,
-                },
-                visible: {
-                  opacity: 1,
-                  x: 5,
-                  transition: { duration: 0.25, ease: "easeOut" },
-                },
+                hidden: { opacity: 0, x: 50 },
+                visible: { opacity: 1, x: 0, transition: { duration: 0.25, ease: 'easeOut' } },
               }}
             >
-              <menu className="menu absolute bottom-0 right-0 top-20 w-[300px] shadow-lg z-10">
-                <div className="p-4 bg-white outline drop-shadow-lg rounded-md">
-                  <h2 className="text-lg font-medium">Timer Options</h2>
-                  <div>
-                    <div>
-                      <input
-                        type="checkbox"
-                        id="sound-enabled"
-                        checked={soundEnabled}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSoundEnabled(e.target.checked)}
-                        className="mr-2"
-                      />
-                      <label htmlFor="sound-enabled">Enable sound</label>
-                    </div>
-                    <div>
-                      <input
-                        type="checkbox"
-                        id="background-warning"
-                        checked={backgroundWarning}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBackgroundWarning(e.target.checked)}
-                        className="mr-2"
-                      />
-                      <label htmlFor="background-warning">
-                        Background Warning
-                      </label>
-                    </div>
-                    {backgroundWarning && (
-                      <div>
-                        <div className="flex items-center">
-                          <input
-                            type="color"
-                            value={backgroundWarningColor}
-                            id="background-warning-color"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              setBackgroundWarningColor(e.target.value)
-                            }
-                            className="bg-white"
-                          />
-                          <label htmlFor="background-warning-color">
-                            Background Warning Color
-                          </label>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            type="color"
-                            value={backgroundStopColor}
-                            id="background-stop-color"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              setBackgroundStopColor(e.target.value)
-                            }
-                            className="bg-white"
-                          />
-                          <label htmlFor="background-stop-color">
-                            Background Stop Color
-                          </label>
-                        </div>
-                      </div>
-                    )}
-                    <div>
-                      <div className="flex items-center">
-                        <input
-                          type="color"
-                          value={textColor}
-                          id="text-color"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextColor(e.target.value)}
-                          className="bg-white"
-                        />
-                        <label htmlFor="text-color">Text Color</label>
-                      </div>
-                      <div className="flex items-center pb-5">
-                        <input
-                          type="color"
-                          value={backgroundColor}
-                          id="background-color"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBackgroundColor(e.target.value)}
-                          className="bg-white"
-                        />
-                        <label htmlFor="background-color">
-                          Background Color
-                        </label>
-                      </div>
-                      <button
-                        className=" bg-slate-300 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-                        onClick={() => {
-                          setSoundEnabled(false);
-                          setTextColor("#FFFFFF");
-                          setBackgroundWarning(true);
-                          setBackgroundColor("#000000");
-                          setBackgroundWarningColor("#EAB308");
-                          setBackgroundStopColor("#8B0000");
-                        }}
-                      >
-                        Restore Defaults
-                      </button>
-                    </div>
-                  </div>
-                  <div className="outline mt-4 p-4 rounded-md">
-                    <h2 className="text-lg font-medium">Keyboard Shortcuts</h2>
-                    <p>F - Fullscreen</p>
-                    <p>M - Menu</p>
-                    <p>H - Hide Buttons</p>
-                    <p>R - Reset</p>
-                    <p>Space - Start/Stop</p>
-                  </div>
-                </div>
-              </menu>
+              <Menu
+                showMenu={showMenu}
+                setShowMenu={setShowMenu}
+                soundEnabled={soundEnabled}
+                setSoundEnabled={setSoundEnabled}
+                backgroundWarning={backgroundWarning}
+                setBackgroundWarning={setBackgroundWarning}
+                backgroundWarningColor={backgroundWarningColor}
+                setBackgroundWarningColor={setBackgroundWarningColor}
+                backgroundStopColor={backgroundStopColor}
+                setBackgroundStopColor={setBackgroundStopColor}
+                textColor={textColor}
+                setTextColor={setTextColor}
+                backgroundColor={backgroundColor}
+                setBackgroundColor={setBackgroundColor}
+                restoreDefaults={() => {
+                  setSoundEnabled(false);
+                  setTextColor('#FFFFFF');
+                  setBackgroundWarning(true);
+                  setBackgroundColor('#000000');
+                  setBackgroundWarningColor('#EAB308');
+                  setBackgroundStopColor('#8B0000');
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -461,6 +361,9 @@ const Timer = () => {
                     typing[1].length === 0 ? timer[1] : parseInt(typing[1]);
                   setInitTimer([newMinute, newSeconds]);
                 }}
+                textColor={textColor}
+                setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
+                activeUnitOfTime={activeUnitOfTime}
               >
                 {isRunning ? "stop" : "start"}
               </Button>
@@ -470,6 +373,9 @@ const Timer = () => {
                   setRunning(false);
                   setTimer(initTimer);
                 }}
+                textColor={textColor}
+                setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
+                activeUnitOfTime={activeUnitOfTime}
               >
                 reset
               </Button>
@@ -483,6 +389,9 @@ const Timer = () => {
                   key={text}
                   className="text-[5vmin] h-[10vmin] w-[16vmin]"
                   onClick={() => handleButtonClick(time)}
+                  textColor={textColor}
+                  setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
+                  activeUnitOfTime={activeUnitOfTime}
                 >
                   {text}
                 </Button>
