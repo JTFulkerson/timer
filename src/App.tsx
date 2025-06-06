@@ -46,13 +46,13 @@ function App() {
           'text-white/80 bg-white/10 leading-10 rounded-[1vmin] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40',
           props.className
         )}
-        onClick={(event) => {
+        onClick={(event: React.MouseEvent<HTMLDivElement>) => {
           props.onClick();
           if (activeUnitOfTime) {
             setActiveUnitOfTime(undefined);
           }
         }}
-        onKeyDown={(event) => {
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
           event.preventDefault();
         }}
       >
@@ -101,7 +101,7 @@ function App() {
     }
   });
 
-  useHotkeys(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (event) => {
+  useHotkeys(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (event: KeyboardEvent) => {
     if (activeUnitOfTime) {
       const currentValue =
         activeUnitOfTime === 'MINUTES' ? typing[0] : typing[1];
