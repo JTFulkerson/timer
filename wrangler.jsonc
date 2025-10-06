@@ -1,5 +1,5 @@
 {
-    "name": "timer-personal-project",
+    "name": "timer",
     "compatibility_date": "2024-06-01",
     "assets": {
         "directory": "./dist"
