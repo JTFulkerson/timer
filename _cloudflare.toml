@@ -1,0 +1,11 @@
+version: 1
+build:
+  command: pnpm build
+  publish: dist
+  skip_if: true
+environment_variables:
+  NODE_VERSION: "18"
+  PNPM_VERSION: "8"
+compatibility_date: 2025-09-02
+compatibility_flags:
+  - nodejs_compat
