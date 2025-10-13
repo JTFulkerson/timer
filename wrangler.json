@@ -11,4 +11,8 @@
   "vars": {
     "NODE_ENV": "production"
   }
+  ,
+  "routes": [
+    "timer.johnfulkerson.com/*"
+  ]
 }
