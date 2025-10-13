@@ -1,6 +1,6 @@
 "use client";
 import classnames from "classnames";
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import useHotkeys from "@reecelucas/react-use-hotkeys";
 import { useSound } from "use-sound";
@@ -234,8 +234,7 @@ const Timer = () => {
   return (
     <>
       <div className="relative">
-        {/* Hamburger menu button always visible */}
-        {!hideButtons && (
+        {!hideButtons && !showMenu && (
           <div className="absolute top-2 right-0 z-50">
             <button
               onClick={(event: React.MouseEvent<HTMLButtonElement>) => setShowMenu(!showMenu)}
@@ -352,6 +351,7 @@ const Timer = () => {
               <Button
                 className="text-[8vmin] h-[12vmin] w-[24vmin]"
                 onClick={() => {
+                  setActiveUnitOfTime(undefined);
                   if (timer[0] || timer[1]) {
                     setRunning(!isRunning);
                   }
@@ -362,20 +362,17 @@ const Timer = () => {
                   setInitTimer([newMinute, newSeconds]);
                 }}
                 textColor={textColor}
-                setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
-                activeUnitOfTime={activeUnitOfTime}
               >
                 {isRunning ? "stop" : "start"}
               </Button>
               <Button
                 className="text-[8vmin] h-[12vmin] w-[24vmin]"
                 onClick={() => {
+                  setActiveUnitOfTime(undefined);
                   setRunning(false);
                   setTimer(initTimer);
                 }}
                 textColor={textColor}
-                setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
-                activeUnitOfTime={activeUnitOfTime}
               >
                 reset
               </Button>
@@ -388,10 +385,11 @@ const Timer = () => {
                 <Button
                   key={text}
                   className="text-[5vmin] h-[10vmin] w-[16vmin]"
-                  onClick={() => handleButtonClick(time)}
+                  onClick={() => {
+                    setActiveUnitOfTime(undefined);
+                    handleButtonClick(time);
+                  }}
                   textColor={textColor}
-                  setActiveUnitOfTime={() => setActiveUnitOfTime(undefined)}
-                  activeUnitOfTime={activeUnitOfTime}
                 >
                   {text}
                 </Button>

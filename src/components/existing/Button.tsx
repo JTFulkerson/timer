@@ -1,41 +1,43 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import classnames from "classnames";
 
-interface TimerButtonProps {
-  className: string;
+interface ButtonProps {
+  className?: string;
   onClick: () => void;
-  textColor: string;
-  setActiveUnitOfTime?: (() => void) | undefined;
-  activeUnitOfTime?: unknown;
+  textColor?: string;
+  disabled?: boolean;
 }
 
-const TimerButton = ({
-  className,
+const Button = ({
+  className = "",
   onClick,
   children,
-  textColor,
-  setActiveUnitOfTime,
-  activeUnitOfTime
-}: PropsWithChildren<TimerButtonProps>) => (
-  <div
-    tabIndex={-1}
-    className={classnames(
-      "bg-white/10 leading-10 rounded-[1vmin] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40",
-      className
-    )}
-    style={{ color: textColor }}
-    onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+  textColor = "#FFFFFF",
+  disabled = false
+}: PropsWithChildren<ButtonProps>) => {
+  const handleClick = () => {
+    if (!disabled) {
       onClick();
-      if (activeUnitOfTime && setActiveUnitOfTime) {
-        setActiveUnitOfTime();
-      }
-    }}
-    onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-      event.preventDefault();
-    }}
-  >
-    {children}
-  </div>
-);
+    }
+  };
 
-export default TimerButton;
+  return (
+    <button
+      type="button"
+      className={classnames(
+        "bg-white/10 leading-10 rounded-[1vmin] border-none outline-none flex flex-col text-center justify-center cursor-pointer hover:bg-white/40 transition-colors duration-200",
+        {
+          "opacity-50 cursor-not-allowed hover:bg-white/10": disabled,
+        },
+        className
+      )}
+      style={{ color: textColor }}
+      onClick={handleClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+};
+
+export default Button;
