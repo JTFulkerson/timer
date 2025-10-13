@@ -1,4 +1,3 @@
-"use client";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
@@ -237,7 +236,7 @@ const Timer = () => {
         {!hideButtons && !showMenu && (
           <div className="absolute top-2 right-0 z-50">
             <button
-              onClick={(event: React.MouseEvent<HTMLButtonElement>) => setShowMenu(!showMenu)}
+              onClick={() => setShowMenu(!showMenu)}
               className="flex items-center px-3 py-2 text-white justify-end"
             >
               <svg
