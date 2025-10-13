@@ -1,10 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "timer-app",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS"
+  },
   "vars": {
-    "MY_VAR": "Hello from Cloudflare"
+    "NODE_ENV": "production"
   }
 }
