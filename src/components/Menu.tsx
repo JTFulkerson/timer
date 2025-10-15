@@ -42,9 +42,9 @@ const Menu = ({
   const handleClose = () => setShowMenu(false);
 
   return (
-    <div className="p-6 bg-white rounded-l-lg shadow-xl h-full overflow-y-auto">
+  <div className="p-0 bg-white rounded-l-lg shadow-xl h-screen flex flex-col overflow-y-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between px-4 pt-4 pb-1">
         <h2 className="text-xl font-semibold text-gray-800">Timer Options</h2>
         <button
           onClick={handleClose}
@@ -58,11 +58,11 @@ const Menu = ({
       </div>
 
       {/* Settings Section */}
-      <div className="space-y-6">
+      <div className="space-y-4 px-4 pb-4 flex-1">
         {/* Sound Settings */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-medium text-gray-700">Sound</h3>
-          <label className="flex items-center space-x-3 cursor-pointer">
+        <div className="space-y-2">
+          <h3 className="text-base font-medium text-gray-700">Sound</h3>
+          <label className="flex items-center space-x-2 cursor-pointer">
             <input
               type="checkbox"
               checked={soundEnabled}
@@ -71,12 +71,12 @@ const Menu = ({
             />
             <span className="text-gray-700">Enable sound when timer ends</span>
           </label>
-          
+
           {soundEnabled && (
-            <div className="pl-4 space-y-3 border-l-2 border-gray-200">
-              <div className="space-y-2">
+            <div className="pl-3 space-y-2 border-l-2 border-gray-200">
+              <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-700">Custom Sound</label>
-                
+
                 {!customSoundUrl ? (
                   <>
                     <input
@@ -92,7 +92,7 @@ const Menu = ({
                             e.target.value = ""; // Clear the input
                             return;
                           }
-                          
+
                           const reader = new FileReader();
                           reader.onload = () => {
                             // Store both the data URL and filename
@@ -151,9 +151,9 @@ const Menu = ({
         </div>
 
         {/* Background Warning Settings */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-medium text-gray-700">Background Warning</h3>
-          <label className="flex items-center space-x-3 cursor-pointer">
+        <div className="space-y-2">
+          <h3 className="text-base font-medium text-gray-700">Background Warning</h3>
+          <label className="flex items-center space-x-2 cursor-pointer">
             <input
               type="checkbox"
               checked={backgroundWarning}
@@ -164,7 +164,7 @@ const Menu = ({
           </label>
 
           {backgroundWarning && (
-            <div className="pl-4 space-y-3 border-l-2 border-gray-200">
+            <div className="pl-3 space-y-2 border-l-2 border-gray-200">
               <div className="flex items-center space-x-3">
                 <input
                   type="color"
@@ -188,9 +188,9 @@ const Menu = ({
         </div>
 
         {/* Color Settings */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-medium text-gray-700">Colors</h3>
-          <div className="space-y-3">
+        <div className="space-y-2">
+          <h3 className="text-base font-medium text-gray-700">Colors</h3>
+          <div className="space-y-2">
             <div className="flex items-center space-x-3">
               <input
                 type="color"
@@ -215,35 +215,36 @@ const Menu = ({
         {/* Restore Defaults Button */}
         <button
           onClick={restoreDefaults}
-          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded-lg transition-colors duration-200 mt-2"
         >
           Restore Defaults
         </button>
-      </div>
-
-      {/* Keyboard Shortcuts Section */}
-      <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-medium text-gray-700 mb-3">Keyboard Shortcuts</h3>
-        <div className="space-y-2 text-sm text-gray-600">
-          <div className="flex justify-between">
-            <span className="font-mono bg-gray-200 px-2 py-1 rounded">F</span>
-            <span>Toggle fullscreen</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-mono bg-gray-200 px-2 py-1 rounded">M</span>
-            <span>Toggle menu</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-mono bg-gray-200 px-2 py-1 rounded">H</span>
-            <span>Hide/show buttons</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-mono bg-gray-200 px-2 py-1 rounded">R</span>
-            <span>Reset timer</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-mono bg-gray-200 px-2 py-1 rounded">Space</span>
-            <span>Start/stop timer</span>
+        {/* Keyboard Shortcuts Section */}
+        <div className="px-4 pt-1 pb-2">
+          <div className="p-3 bg-gray-50 rounded-lg">
+            <h3 className="text-base font-medium text-gray-700 mb-2">Keyboard Shortcuts</h3>
+            <div className="space-y-1 text-sm text-gray-600">
+              <div className="flex justify-between">
+                <span className="font-mono bg-gray-200 px-2 py-1 rounded">F</span>
+                <span>Toggle fullscreen</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono bg-gray-200 px-2 py-1 rounded">M</span>
+                <span>Toggle menu</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono bg-gray-200 px-2 py-1 rounded">H</span>
+                <span>Hide/show buttons</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono bg-gray-200 px-2 py-1 rounded">R</span>
+                <span>Reset timer</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono bg-gray-200 px-2 py-1 rounded">Space</span>
+                <span>Start/stop timer</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

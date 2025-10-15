@@ -7,22 +7,23 @@ import appCss from '../styles.css?url'
 export const Route = createRootRoute({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'Timer - A simple, customizable timer app',
-      },
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: 'Timer - A simple, customizable timer app' },
+      // Open Graph
+      { property: 'og:title', content: 'Timer - A simple, customizable timer app' },
+      { property: 'og:description', content: 'A beautiful, customizable timer for productivity, workouts, and more. Fast, minimal, and works everywhere.' },
+      { property: 'og:image', content: '/preview.png' },
+      { property: 'og:url', content: 'https://timer.johnfulkerson.com' },
+      { property: 'og:type', content: 'website' },
+      // Twitter Card
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: 'Timer - A simple, customizable timer app' },
+      { name: 'twitter:description', content: 'A customizable timer for productivity, workouts, and more. Fast, minimal, and works everywhere.' },
+      { name: 'twitter:image', content: '/preview.png' },
     ],
     links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
+      { rel: 'stylesheet', href: appCss },
     ],
   }),
 
