@@ -44,7 +44,7 @@ const TimerDisplay = ({
 }: TimerDisplayProps) => {
   return (
     <p
-      className={`font-bold text-[16vw] sm:text-[44vmin] ${hideButtons ? "sm:text-[55vmin]" : ""} leading-none select-none`}
+      className={`font-bold text-[16vw] sm:text-[32vmin] md:text-[36vmin] lg:text-[40vmin] ${hideButtons ? "sm:text-[40vmin] md:text-[48vmin] lg:text-[56vmin]" : ""} leading-none select-none w-full max-w-full flex justify-center items-center overflow-hidden`}
       style={{ color: textColor }}
     >
       <UnitOfTime

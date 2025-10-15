@@ -214,26 +214,30 @@ const Timer = () => {
         </AnimatePresence>
       </div>
       <main
-        className="flex flex-col items-center justify-center gap-4 min-h-screen w-full px-2 sm:px-0"
+        className="flex flex-col min-h-screen w-full px-2 sm:px-0 sm:items-center sm:justify-between justify-between"
         style={{ backgroundColor: getBackgroundColor() }}
       >
-        <TimerDisplay
-          timer={timerState.timer}
-          typing={timerInput.typing}
-          activeUnitOfTime={timerInput.activeUnitOfTime}
-          hideButtons={uiState.hideButtons}
-          textColor={colorSettings.textColor}
-          onSetActive={handleSetActive}
-        />
-        <TimerControls
-          isRunning={timerState.isRunning}
-          hideButtons={uiState.hideButtons}
-          textColor={colorSettings.textColor}
-          timerButtons={timerButtons}
-          onStartStop={handleStartStop}
-          onReset={handleReset}
-          onPresetClick={handlePresetClick}
-        />
+  <div className="flex flex-col items-center flex-1 justify-center min-h-0 w-full h-full">
+          <TimerDisplay
+            timer={timerState.timer}
+            typing={timerInput.typing}
+            activeUnitOfTime={timerInput.activeUnitOfTime}
+            hideButtons={uiState.hideButtons}
+            textColor={colorSettings.textColor}
+            onSetActive={handleSetActive}
+          />
+        </div>
+        <div className="flex flex-col items-center pb-8 sm:pb-16 w-full">
+          <TimerControls
+            isRunning={timerState.isRunning}
+            hideButtons={uiState.hideButtons}
+            textColor={colorSettings.textColor}
+            timerButtons={timerButtons}
+            onStartStop={handleStartStop}
+            onReset={handleReset}
+            onPresetClick={handlePresetClick}
+          />
+        </div>
       </main>
     </>
   );
