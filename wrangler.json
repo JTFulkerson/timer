@@ -20,5 +20,11 @@
       "invocation_logs": true,
       "persist": true
     }
-  }
+  },
+  "routes": [
+    {
+      "pattern": "timer.johnfulkerson.com",
+      "custom_domain": true
+    }
+  ]
 }
