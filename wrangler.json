@@ -1,10 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "timer-app",
+  "name": "timer",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "workers_dev": false,
   "main": "@tanstack/react-start/server-entry",
   "assets": {
     "directory": "public",
