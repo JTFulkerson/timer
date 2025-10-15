@@ -1,8 +1,10 @@
-interface MenuProps {
+export interface MenuProps {
   showMenu: boolean;
   setShowMenu: (show: boolean) => void;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  customSoundUrl: string;
+  setCustomSoundUrl: (url: string) => void;
   backgroundWarning: boolean;
   setBackgroundWarning: (enabled: boolean) => void;
   backgroundWarningColor: string;
@@ -21,6 +23,8 @@ const Menu = ({
   setShowMenu,
   soundEnabled,
   setSoundEnabled,
+  customSoundUrl,
+  setCustomSoundUrl,
   backgroundWarning,
   setBackgroundWarning,
   backgroundWarningColor,
@@ -67,6 +71,83 @@ const Menu = ({
             />
             <span className="text-gray-700">Enable sound when timer ends</span>
           </label>
+          
+          {soundEnabled && (
+            <div className="pl-4 space-y-3 border-l-2 border-gray-200">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Custom Sound</label>
+                
+                {!customSoundUrl ? (
+                  <>
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          // Check file size (5MB limit)
+                          const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                          if (file.size > maxSize) {
+                            alert("File size must be less than 5MB");
+                            e.target.value = ""; // Clear the input
+                            return;
+                          }
+                          
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            // Store both the data URL and filename
+                            const dataUrl = reader.result as string;
+                            setCustomSoundUrl(dataUrl);
+                            // Store filename in the data URL by adding it as a comment
+                            localStorage.setItem("customSoundFilename", file.name);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                    />
+                    <p className="text-xs text-gray-500">
+                      MP3, WAV, OGG supported (max 5MB)
+                    </p>
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 p-2 bg-green-50 rounded border border-green-200">
+                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                      </svg>
+                      <span className="text-sm text-gray-700 flex-1 truncate">
+                        {typeof window !== "undefined" ? localStorage.getItem("customSoundFilename") || "Custom sound" : "Custom sound"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const audio = new Audio(customSoundUrl);
+                          audio.volume = 0.25;
+                          audio.play();
+                        }}
+                        className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded transition-colors"
+                      >
+                        Test Sound
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCustomSoundUrl("");
+                          if (typeof window !== "undefined") {
+                            localStorage.removeItem("customSoundFilename");
+                          }
+                        }}
+                        className="text-xs bg-red-50 hover:bg-red-100 text-red-700 px-3 py-1 rounded transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Background Warning Settings */}
