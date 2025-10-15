@@ -168,7 +168,7 @@ const Timer = () => {
 
   return (
     <>
-      <div className="relative">
+  <div className="relative z-10">
         <MenuButton
           hideButtons={uiState.hideButtons}
           showMenu={uiState.showMenu}
@@ -177,7 +177,7 @@ const Timer = () => {
         <AnimatePresence>
           {uiState.showMenu && (
             <motion.div
-              className="fixed top-0 right-0 z-40 w-[min(90vw,400px)] h-auto rounded-l-lg shadow-lg bg-white"
+              className="fixed top-0 right-0 z-40 w-full max-w-[400px] sm:w-[min(90vw,400px)] h-full sm:h-auto rounded-none sm:rounded-l-lg shadow-lg bg-white"
               initial="hidden"
               animate="visible"
               exit="hidden"
@@ -213,16 +213,9 @@ const Timer = () => {
           )}
         </AnimatePresence>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "3vmin",
-          height: "100vh",
-          backgroundColor: getBackgroundColor(),
-        }}
+      <main
+        className="flex flex-col items-center justify-center gap-4 min-h-screen w-full px-2 sm:px-0"
+        style={{ backgroundColor: getBackgroundColor() }}
       >
         <TimerDisplay
           timer={timerState.timer}
@@ -241,7 +234,7 @@ const Timer = () => {
           onReset={handleReset}
           onPresetClick={handlePresetClick}
         />
-      </div>
+      </main>
     </>
   );
 };

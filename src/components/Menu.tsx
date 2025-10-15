@@ -42,7 +42,7 @@ const Menu = ({
   const handleClose = () => setShowMenu(false);
 
   return (
-  <div className="p-0 bg-white rounded-l-lg shadow-xl h-screen flex flex-col overflow-y-auto">
+  <div className="p-0 bg-white rounded-none sm:rounded-l-lg shadow-xl h-screen w-full max-w-[400px] flex flex-col overflow-y-auto">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-1">
         <h2 className="text-xl font-semibold text-gray-800">Timer Options</h2>
