@@ -129,6 +129,9 @@ const Timer = () => {
   };
 
   const handlePresetClick = (time: [number, number]) => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     timerInput.setActiveUnitOfTime(undefined);
     timerState.setTimer(time);
     timerState.setInitTimer(time);
@@ -145,6 +148,7 @@ const Timer = () => {
     colorSettings.setBackgroundStopColor("#8B0000");
     setTimerButtons(DEFAULT_TIMER_BUTTONS);
     uiState.setHideButtons(false);
+    uiState.setTimeButtonsAlignment("center");
   };
 
   const getBackgroundColor = () => {
@@ -207,6 +211,8 @@ const Timer = () => {
                 setTextColor={colorSettings.setTextColor}
                 backgroundColor={colorSettings.backgroundColor}
                 setBackgroundColor={colorSettings.setBackgroundColor}
+                timeButtonsAlignment={uiState.timeButtonsAlignment}
+                setTimeButtonsAlignment={uiState.setTimeButtonsAlignment}
                 restoreDefaults={handleRestoreDefaults}
               />
             </motion.div>
@@ -228,15 +234,18 @@ const Timer = () => {
           />
         </div>
         <div className="flex flex-col items-center pb-8 sm:pb-16 w-full">
-          <TimerControls
-            isRunning={timerState.isRunning}
-            hideButtons={uiState.hideButtons}
-            textColor={colorSettings.textColor}
-            timerButtons={timerButtons}
-            onStartStop={handleStartStop}
-            onReset={handleReset}
-            onPresetClick={handlePresetClick}
-          />
+          {uiState.isHydrated && (
+            <TimerControls
+              isRunning={timerState.isRunning}
+              hideButtons={uiState.hideButtons}
+              textColor={colorSettings.textColor}
+              timerButtons={timerButtons}
+              timeButtonsAlignment={uiState.timeButtonsAlignment}
+              onStartStop={handleStartStop}
+              onReset={handleReset}
+              onPresetClick={handlePresetClick}
+            />
+          )}
         </div>
       </main>
     </>

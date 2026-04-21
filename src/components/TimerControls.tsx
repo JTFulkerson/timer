@@ -1,11 +1,12 @@
 import Button from "./Button";
-import { TimerButtonProps } from "./Types";
+import { TimeButtonsAlignment, TimerButtonProps } from "./Types";
 
 interface TimerControlsProps {
   isRunning: boolean;
   hideButtons: boolean;
   textColor: string;
   timerButtons: TimerButtonProps[];
+  timeButtonsAlignment: TimeButtonsAlignment;
   onStartStop: () => void;
   onReset: () => void;
   onPresetClick: (time: [number, number]) => void;
@@ -16,15 +17,23 @@ const TimerControls = ({
   hideButtons,
   textColor,
   timerButtons,
+  timeButtonsAlignment,
   onStartStop,
   onReset,
   onPresetClick,
 }: TimerControlsProps) => {
   if (hideButtons) return null;
 
+  const alignmentClass =
+    timeButtonsAlignment === "left"
+      ? "flex-start"
+      : timeButtonsAlignment === "right"
+        ? "flex-end"
+        : "center";
+
   return (
     <div className="flex flex-col gap-3 w-full items-center" style={{ visibility: hideButtons ? "hidden" : "visible" }}>
-  <div className="flex flex-row flex-wrap justify-center items-center w-full gap-x-4 gap-y-4">
+    <div className="flex flex-row flex-wrap justify-center items-center w-full gap-x-4 gap-y-4">
         <Button
           className="text-lg sm:text-[8vmin] h-12 sm:h-[12vmin] w-28 sm:w-[24vmin]"
           onClick={onStartStop}
@@ -40,7 +49,14 @@ const TimerControls = ({
           reset
         </Button>
       </div>
-  <div className="flex flex-row flex-wrap justify-center items-center w-full gap-x-4 gap-y-4">
+      <div
+        className="flex flex-row flex-wrap items-center w-full gap-x-4 gap-y-4"
+        style={{
+          justifyContent: alignmentClass,
+          alignSelf: "stretch",
+          width: "100%",
+        }}
+      >
         {timerButtons.map(({ text, time }) => (
           <Button
             key={text}

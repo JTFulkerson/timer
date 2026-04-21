@@ -15,6 +15,8 @@ export interface MenuProps {
   setTextColor: (color: string) => void;
   backgroundColor: string;
   setBackgroundColor: (color: string) => void;
+  timeButtonsAlignment: "left" | "center" | "right";
+  setTimeButtonsAlignment: (alignment: "left" | "center" | "right") => void;
   restoreDefaults: () => void;
 }
 
@@ -35,6 +37,8 @@ const Menu = ({
   setTextColor,
   backgroundColor,
   setBackgroundColor,
+  timeButtonsAlignment,
+  setTimeButtonsAlignment,
   restoreDefaults,
 }: MenuProps) => {
   if (!showMenu) return null;
@@ -209,6 +213,28 @@ const Menu = ({
               />
               <label className="text-gray-700">Background color</label>
             </div>
+          </div>
+        </div>
+
+        {/* Time Buttons Alignment */}
+        <div className="space-y-2">
+          <h3 className="text-base font-medium text-gray-700">Time Buttons</h3>
+          <div className="space-y-2">
+            <label htmlFor="time-buttons-alignment" className="text-gray-700 block">
+              Alignment
+            </label>
+            <select
+              id="time-buttons-alignment"
+              value={timeButtonsAlignment}
+              onChange={(e) =>
+                setTimeButtonsAlignment(e.target.value as "left" | "center" | "right")
+              }
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { TimeButtonsAlignment } from "../Types";
 
 export interface ColorSettings {
   backgroundColor: string;
@@ -110,10 +111,55 @@ export const useTimerInput = () => {
 
 export const useUIState = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [hideButtons, setHideButtons] = useLocalStorage("hideButtons", false);
+  const [hideButtons, setHideButtons] = useState(false);
+  const [timeButtonsAlignment, setTimeButtonsAlignment] = useState<TimeButtonsAlignment>("center");
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedHideButtons = localStorage.getItem("hideButtons");
+    if (storedHideButtons !== null) {
+      try {
+        const parsedHideButtons = JSON.parse(storedHideButtons) as unknown;
+        if (typeof parsedHideButtons === "boolean") {
+          setHideButtons(parsedHideButtons);
+        }
+      } catch {
+        if (storedHideButtons === "true" || storedHideButtons === "false") {
+          setHideButtons(storedHideButtons === "true");
+        }
+      }
+    }
+
+    const storedAlignment = localStorage.getItem("timeButtonsAlignment");
+    if (storedAlignment !== null) {
+      try {
+        const parsedAlignment = JSON.parse(storedAlignment) as unknown;
+        if (parsedAlignment === "left" || parsedAlignment === "center" || parsedAlignment === "right") {
+          setTimeButtonsAlignment(parsedAlignment);
+        }
+      } catch {
+        if (storedAlignment === "left" || storedAlignment === "center" || storedAlignment === "right") {
+          setTimeButtonsAlignment(storedAlignment);
+        }
+      }
+    }
+
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && isHydrated) {
+      localStorage.setItem("hideButtons", JSON.stringify(hideButtons));
+      localStorage.setItem("timeButtonsAlignment", JSON.stringify(timeButtonsAlignment));
+    }
+  }, [hideButtons, timeButtonsAlignment, isHydrated]);
 
   const toggleButtonsVisibility = () => {
-    setHideButtons(!hideButtons);
+    setHideButtons((prev) => !prev);
   };
 
   return {
@@ -121,6 +167,9 @@ export const useUIState = () => {
     setShowMenu,
     hideButtons,
     setHideButtons,
+    timeButtonsAlignment,
+    setTimeButtonsAlignment,
+    isHydrated,
     toggleButtonsVisibility,
   };
 };

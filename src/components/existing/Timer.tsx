@@ -42,6 +42,10 @@ const Timer = () => {
   >();
   const [typing, setTyping] = useState<[string, string]>(["", ""]);
   const [showMenu, setShowMenu] = useState(false);
+  const [timeButtonsAlignment, setTimeButtonsAlignment] = useState<
+    "left" | "center" | "right"
+  >("center");
+  const [isHydrated, setIsHydrated] = useState(false);
   const [soundEnabled, setSoundEnabled] = useLocalStorage(
     "soundEnabled",
     false
@@ -75,8 +79,44 @@ const Timer = () => {
 
   const [hideButtons, setHideButtons] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedHideButtons = localStorage.getItem("hideButtons");
+    if (storedHideButtons !== null) {
+      try {
+        const parsedHideButtons = JSON.parse(storedHideButtons) as unknown;
+        if (typeof parsedHideButtons === "boolean") {
+          setHideButtons(parsedHideButtons);
+        }
+      } catch {
+        if (storedHideButtons === "true" || storedHideButtons === "false") {
+          setHideButtons(storedHideButtons === "true");
+        }
+      }
+    }
+
+    const storedAlignment = localStorage.getItem("timeButtonsAlignment");
+    if (storedAlignment !== null) {
+      try {
+        const parsedAlignment = JSON.parse(storedAlignment) as unknown;
+        if (parsedAlignment === "left" || parsedAlignment === "center" || parsedAlignment === "right") {
+          setTimeButtonsAlignment(parsedAlignment);
+        }
+      } catch {
+        if (storedAlignment === "left" || storedAlignment === "center" || storedAlignment === "right") {
+          setTimeButtonsAlignment(storedAlignment);
+        }
+      }
+    }
+
+    setIsHydrated(true);
+  }, []);
+
   const toggleButtonsVisibility = () => {
-    setHideButtons(!hideButtons);
+    setHideButtons((prev) => !prev);
   };
 
   useHotkeys("f", () => {
@@ -215,6 +255,13 @@ const Timer = () => {
     }
   }, [showMenu]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && isHydrated) {
+      localStorage.setItem("hideButtons", JSON.stringify(hideButtons));
+      localStorage.setItem("timeButtonsAlignment", JSON.stringify(timeButtonsAlignment));
+    }
+  }, [hideButtons, timeButtonsAlignment, isHydrated]);
+
   interface TimerButtonProps {
     text: string;
     time: [number, number];
@@ -244,6 +291,13 @@ const Timer = () => {
     setInitTimer(time);
     setRunning(false);
   };
+
+  const presetButtonsJustifyContent =
+    timeButtonsAlignment === "left"
+      ? "flex-start"
+      : timeButtonsAlignment === "right"
+        ? "flex-end"
+        : "center";
 
   return (
     <>
@@ -297,6 +351,8 @@ const Timer = () => {
                 setTextColor={setTextColor}
                 backgroundColor={backgroundColor}
                 setBackgroundColor={setBackgroundColor}
+                timeButtonsAlignment={timeButtonsAlignment}
+                setTimeButtonsAlignment={setTimeButtonsAlignment}
                 restoreDefaults={() => {
                   setSoundEnabled(false);
                   setCustomSoundUrl("");
@@ -305,6 +361,7 @@ const Timer = () => {
                   setBackgroundColor('#000000');
                   setBackgroundWarningColor('#EAB308');
                   setBackgroundStopColor('#8B0000');
+                  setTimeButtonsAlignment("center");
                 }}
               />
             </motion.div>
@@ -358,7 +415,7 @@ const Timer = () => {
             }}
           />
         </p>
-        {hideButtons ? null : (
+        {!isHydrated || hideButtons ? null : (
           <>
             <div
               className="flex flex-row gap-[3vmin]"
@@ -395,7 +452,12 @@ const Timer = () => {
             </div>
             <div
               className="flex flex-row gap-[3vmin]"
-              style={{ visibility: hideButtons ? "hidden" : "visible" }}
+              style={{
+                visibility: hideButtons ? "hidden" : "visible",
+                justifyContent: presetButtonsJustifyContent,
+                alignSelf: "stretch",
+                width: "100%",
+              }}
             >
               {timerButtons.map(({ text, time }) => (
                 <Button
